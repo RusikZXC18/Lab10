@@ -1,0 +1,57 @@
+import os
+
+# Функція для створення файлу з базовим заголовком, якщо він ще не існує
+def create_file_if_not_exists(filename):
+    if not os.path.exists(filename):  # Перевіряємо, чи файл вже існує
+        try:
+            # Створюємо новий файл і записуємо заголовок
+            with open(filename, 'w', encoding='utf-8') as file:
+                file.write("Записи студентів:\n")
+                file.write("=" * 40 + "\n")  # Додаємо розділювач
+            print(f"Файл '{filename}' створено.")
+        except Exception as e:
+            print(f"Не вдалося створити файл: {e}")
+    else:
+        print(f"Файл '{filename}' вже існує.")
+
+# Функція для запису даних у файл
+# Параметри: filename - назва файлу, student_name - ім'я студента, answer - відповідь на питання, question - нове питання
+def write_to_file(filename, student_name, answer=None, question=None):
+    try:
+        # Відкриваємо файл для додавання нових рядків (режим 'a' - append)
+        with open(filename, 'a', encoding='utf-8') as file:
+            file.write(f"Прізвище: {student_name}\n")  # Записуємо прізвище студента
+            if answer:
+                file.write(f"Відповідь: {answer}\n")  # Якщо є відповідь, записуємо її
+            if question:
+                file.write(f"Питання: {question}\n")  # Якщо є нове питання, записуємо його
+            file.write("-" * 40 + "\n")  # Додаємо розділювач для розділення записів
+        print(f"Дані успішно записані студентом {student_name}.")  # Інформуємо про успішний запис
+    except FileNotFoundError:
+        print(f"Помилка: файл '{filename}' не знайдено.")  # Обробка випадку, коли файл не знайдено
+    except Exception as e:
+        print(f"Сталася непередбачена помилка: {e}")  # Інші виключні ситуації
+
+# Функція для читання файлу та виведення його вмісту
+def read_file(filename):
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            print(file.read())  # Виводимо весь вміст файлу
+    except FileNotFoundError:
+        print(f"Помилка: файл '{filename}' не знайдено.")  # Обробка випадку, коли файл не знайдено
+    except Exception as e:
+        print(f"Сталася непередбачена помилка: {e}")  # Інші виключні ситуації
+
+# Назва файлу для роботи
+filename = "students_questions.txt"
+
+# Створюємо файл, якщо він не існує
+create_file_if_not_exists(filename)
+
+# Записи студентів
+# Студент 1: Кратенко Руслан задає питання
+write_to_file(
+    filename,
+    "Кратенко Руслан",  # Прізвище студента
+    question="Напишіть програму, яка обчислює факторіал числа."  # Питання для наступного студента
+)
